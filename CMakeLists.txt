@@ -1,0 +1,27 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 4.3)
+PROJECT(simple_crud_userver_easy)
+
+SET(CMAKE_CXX_COMPILER g++-14)
+SET(CMAKE_C_COMPILER gcc-14)
+SET(CMAKE_CXX_STANDARD 23)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+FIND_PACKAGE(userver COMPONENTS core easy mysql REQUIRED)
+
+IF(${userver_FOUND})
+  message(STATUS "userver found")
+  message(STATUS "userver version: ${userver_VERSION}")
+ENDIF()
+
+FILE(GLOB_RECURSE DEPENDENCIES "${CMAKE_SOURCE_DIR}/Dependencies/*.cpp")
+FILE(GLOB_RECURSE DABERDEV_COMPONENTS "${CMAKE_SOURCE_DIR}/Components/*.cpp")
+
+ADD_EXECUTABLE(
+    ${PROJECT_NAME}
+    main.cpp
+    ${DEPENDENCIES}
+    ${DABERDEV_COMPONENTS}
+)
+target_precompile_headers(${PROJECT_NAME} PRIVATE pch.hpp)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} userver::core userver::easy userver::mysql)
