@@ -1,4 +1,6 @@
 #include "AppDeps.hpp"
+#include <userver/logging/level.hpp>
+#include <userver/logging/log.hpp>
 
 struct User {
     std::string username{};
@@ -27,8 +29,11 @@ int main(int argc, char** argv){
     userver::easy::HttpWith<userver::easy::AppDeps>(argc, argv)
         .DefaultContentType(userver::http::content_type::kApplicationJson)
         .Get("/test-auth",[](const userver::server::http::HttpRequest& req, const userver::easy::AppDeps& dep) -> std::string {
-            dep.oauth.Auth(req);
+            dep.oauthGithub.Auth(req);
             return {};
+        })
+        .Get("/callback", [](const userver::server::http::HttpRequest& req, const userver::easy::AppDeps& dep) -> std::string {
+            return dep.oauthGithub.GetData(req);
         })
         .Post(
             "/test-email",

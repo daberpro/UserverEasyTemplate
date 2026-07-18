@@ -18,7 +18,8 @@
 #include <userver/concurrent/background_task_storage.hpp>
 #include <userver/clients/http/client.hpp>
 #include <userver/clients/http/component.hpp>
-
+#include <userver/clients/http/middlewares/pipeline_component.hpp>
+#include <userver/utils/uuid7.hpp>
 
 // Database & I/O
 #include <userver/storages/mysql.hpp>
